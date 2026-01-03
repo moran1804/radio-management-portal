@@ -1,0 +1,571 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "13.0.4"
+  }
+  public: {
+    Tables: {
+      djs: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          display_name: string
+          icecast_address: string | null
+          icecast_mountpoint: string | null
+          icecast_password_encrypted: string | null
+          icecast_port: number | null
+          icecast_username: string | null
+          id: string
+          profile_picture_url: string | null
+          user_id: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          display_name: string
+          icecast_address?: string | null
+          icecast_mountpoint?: string | null
+          icecast_password_encrypted?: string | null
+          icecast_port?: number | null
+          icecast_username?: string | null
+          id?: string
+          profile_picture_url?: string | null
+          user_id: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string
+          icecast_address?: string | null
+          icecast_mountpoint?: string | null
+          icecast_password_encrypted?: string | null
+          icecast_port?: number | null
+          icecast_username?: string | null
+          id?: string
+          profile_picture_url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      job_events: {
+        Row: {
+          id: number
+          job_id: string
+          level: string | null
+          message: string | null
+          ts: string | null
+        }
+        Insert: {
+          id?: number
+          job_id: string
+          level?: string | null
+          message?: string | null
+          ts?: string | null
+        }
+        Update: {
+          id?: number
+          job_id?: string
+          level?: string | null
+          message?: string | null
+          ts?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_events_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          created_at: string | null
+          id: string
+          pid: number | null
+          run_at: string
+          schedule_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          pid?: number | null
+          run_at: string
+          schedule_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          pid?: number | null
+          run_at?: string
+          schedule_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          active: boolean
+          created_at: string
+          icecast_address: string | null
+          icecast_mountpoint: string | null
+          icecast_password_encrypted: string | null
+          icecast_port: number | null
+          icecast_username: string | null
+          id: string
+          name: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          icecast_address?: string | null
+          icecast_mountpoint?: string | null
+          icecast_password_encrypted?: string | null
+          icecast_port?: number | null
+          icecast_username?: string | null
+          id?: string
+          name: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          icecast_address?: string | null
+          icecast_mountpoint?: string | null
+          icecast_password_encrypted?: string | null
+          icecast_port?: number | null
+          icecast_username?: string | null
+          id?: string
+          name?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      recurring_slots: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          day_of_week: number
+          description: string | null
+          dj_id: string
+          duration_minutes: number
+          id: string
+          is_active: boolean
+          start_time: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          day_of_week: number
+          description?: string | null
+          dj_id: string
+          duration_minutes: number
+          id?: string
+          is_active?: boolean
+          start_time: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          day_of_week?: number
+          description?: string | null
+          dj_id?: string
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          start_time?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recurring_slots_dj_id_fkey"
+            columns: ["dj_id"]
+            isOneToOne: false
+            referencedRelation: "djs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      remote_config: {
+        Row: {
+          created_at: string | null
+          id: string
+          key: string
+          updated_at: string | null
+          value: Json
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          key: string
+          updated_at?: string | null
+          value: Json
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          key?: string
+          updated_at?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
+      schedules: {
+        Row: {
+          created_at: string | null
+          ends_at: string
+          id: string
+          show_id: string
+          starts_at: string
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          ends_at: string
+          id?: string
+          show_id: string
+          starts_at: string
+          status?: string
+        }
+        Update: {
+          created_at?: string | null
+          ends_at?: string
+          id?: string
+          show_id?: string
+          starts_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "schedules_show_id_fkey"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shows: {
+        Row: {
+          created_at: string
+          description: string | null
+          dj_id: string | null
+          duration_seconds: number | null
+          end_time: string
+          file_path: string | null
+          id: string
+          recurring_slot_id: string | null
+          scheduled_by: string | null
+          show_type: string | null
+          start_time: string
+          status: string | null
+          storage_path: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          dj_id?: string | null
+          duration_seconds?: number | null
+          end_time: string
+          file_path?: string | null
+          id?: string
+          recurring_slot_id?: string | null
+          scheduled_by?: string | null
+          show_type?: string | null
+          start_time: string
+          status?: string | null
+          storage_path?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          dj_id?: string | null
+          duration_seconds?: number | null
+          end_time?: string
+          file_path?: string | null
+          id?: string
+          recurring_slot_id?: string | null
+          scheduled_by?: string | null
+          show_type?: string | null
+          start_time?: string
+          status?: string | null
+          storage_path?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shows_dj_id_fkey"
+            columns: ["dj_id"]
+            isOneToOne: false
+            referencedRelation: "djs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shows_recurring_slot_id_fkey"
+            columns: ["recurring_slot_id"]
+            isOneToOne: false
+            referencedRelation: "recurring_slots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shows_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      streaming_credentials: {
+        Row: {
+          address: string
+          created_at: string
+          created_by: string | null
+          id: string
+          mountpoint: string
+          password: string
+          port: number
+          type: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          address?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          mountpoint?: string
+          password?: string
+          port?: number
+          type?: string
+          updated_at?: string
+          username?: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          mountpoint?: string
+          password?: string
+          port?: number
+          type?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          role: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      check_show_conflict: {
+        Args: {
+          p_end_time: string
+          p_exclude_show_id?: string
+          p_start_time: string
+        }
+        Returns: boolean
+      }
+      generate_recurring_shows: {
+        Args: { p_start_date?: string; p_weeks_ahead?: number }
+        Returns: number
+      }
+      get_current_user_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      set_initial_admin: { Args: never; Returns: undefined }
+    }
+    Enums: {
+      user_role: "DJ" | "ADMIN"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      user_role: ["DJ", "ADMIN"],
+    },
+  },
+} as const
