@@ -1,23 +1,30 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useStationConfig } from "@/hooks/useStationConfig";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Radio } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoImage from "@/assets/logo.png";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, signUp } = useAuth();
+  const { config } = useStationConfig();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode');
+
+  // Use configured values or fallbacks
+  const displayLogo = config?.stationLogo || logoImage;
+  const stationName = config?.stationName || "Station Manager";
+  const platformUrl = config?.platformUrl || window.location.origin;
 
   const handlePasswordSetup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -147,7 +154,7 @@ const Auth = () => {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `https://mgmt.sdradiouk.co.uk/auth?mode=reset-password`,
+        redirectTo: `${platformUrl}/auth?mode=reset-password`,
       });
 
       if (error) {
@@ -179,7 +186,13 @@ const Auth = () => {
       <div className="min-h-screen flex items-center justify-center bg-background p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <img src={logoImage} alt="SD Radio Logo" className="mx-auto mb-4 h-16 w-auto" />
+            {displayLogo ? (
+              <img src={displayLogo} alt={`${stationName} Logo`} className="mx-auto mb-4 h-16 w-auto rounded" />
+            ) : (
+              <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <Radio className="h-8 w-8 text-primary" />
+              </div>
+            )}
             <CardTitle className="text-2xl">
               {mode === 'reset-password' ? 'Reset Your Password' : 'Set Your Password'}
             </CardTitle>
@@ -232,8 +245,14 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <img src={logoImage} alt="SD Radio Logo" className="mx-auto mb-4 h-16 w-auto" />
-          <CardTitle className="text-2xl">SD Radio Station Manager</CardTitle>
+          {displayLogo ? (
+            <img src={displayLogo} alt={`${stationName} Logo`} className="mx-auto mb-4 h-16 w-auto rounded" />
+          ) : (
+            <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <Radio className="h-8 w-8 text-primary" />
+            </div>
+          )}
+          <CardTitle className="text-2xl">{stationName}</CardTitle>
           <CardDescription>
             Access your radio station management dashboard
           </CardDescription>
