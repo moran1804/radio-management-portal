@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Radio, Upload, Globe, Server, UserPlus, Check } from "lucide-react";
+import { Loader2, Radio, Upload, Globe, Server, UserPlus, Check, Database, Download, Copy } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { generateDatabaseSetupScript, downloadDatabaseScript } from "@/utils/databaseSetupScript";
+import { Textarea } from "@/components/ui/textarea";
 
-type Step = "welcome" | "station" | "streaming" | "admin" | "complete";
+type Step = "welcome" | "database" | "station" | "streaming" | "admin" | "complete";
 
 export const SetupWizard = () => {
   const { saveConfig, completeSetup } = useStationConfig();
@@ -110,11 +111,18 @@ export const SetupWizard = () => {
     window.location.reload();
   };
 
+  const handleCopyScript = () => {
+    const script = generateDatabaseSetupScript();
+    navigator.clipboard.writeText(script);
+    toast.success("SQL script copied to clipboard");
+  };
+
   const steps = [
     { id: "welcome", label: "Welcome" },
+    { id: "database", label: "Database" },
     { id: "station", label: "Station" },
     { id: "streaming", label: "Streaming" },
-    { id: "admin", label: "Admin User" },
+    { id: "admin", label: "Admin" },
     { id: "complete", label: "Complete" },
   ];
 
@@ -160,9 +168,83 @@ export const SetupWizard = () => {
               Let's set up your radio station management platform. This wizard will guide you through the initial configuration.
             </CardDescription>
           </CardHeader>
+          <CardContent>
+            <div className="bg-muted/50 rounded-lg p-4 text-sm text-muted-foreground">
+              <p className="font-medium text-foreground mb-2">Before you begin:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Ensure your local Supabase instance is running</li>
+                <li>Have your streaming server details ready</li>
+                <li>You'll create the first admin account</li>
+              </ul>
+            </div>
+          </CardContent>
           <CardFooter className="flex justify-center">
-            <Button onClick={() => setCurrentStep("station")} size="lg">
+            <Button onClick={() => setCurrentStep("database")} size="lg">
               Get Started
+            </Button>
+          </CardFooter>
+        </Card>
+      )}
+
+      {/* Database Setup Step */}
+      {currentStep === "database" && (
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Database className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle>Database Setup</CardTitle>
+                <CardDescription>Initialize your Supabase database with required tables</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+              <p className="text-sm text-amber-800 dark:text-amber-200">
+                <strong>Important:</strong> Run this SQL script in your Supabase SQL Editor before proceeding. 
+                This creates all required tables, functions, and security policies.
+              </p>
+            </div>
+
+            <div className="flex gap-2">
+              <Button onClick={downloadDatabaseScript} variant="outline" className="flex-1">
+                <Download className="mr-2 h-4 w-4" />
+                Download SQL Script
+              </Button>
+              <Button onClick={handleCopyScript} variant="outline" className="flex-1">
+                <Copy className="mr-2 h-4 w-4" />
+                Copy to Clipboard
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              <Label>SQL Preview</Label>
+              <Textarea
+                readOnly
+                value={generateDatabaseSetupScript().slice(0, 1000) + "\n\n... (script continues)"}
+                className="h-48 font-mono text-xs"
+              />
+            </div>
+
+            <div className="bg-muted rounded-lg p-4 space-y-2 text-sm">
+              <p className="font-medium">How to run the script:</p>
+              <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+                <li>Open your Supabase dashboard (or local Studio at port 54323)</li>
+                <li>Go to SQL Editor</li>
+                <li>Paste the downloaded/copied script</li>
+                <li>Click "Run" to execute</li>
+                <li>Return here and continue setup</li>
+              </ol>
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <Button variant="outline" onClick={() => setCurrentStep("welcome")}>
+              Back
+            </Button>
+            <Button onClick={() => setCurrentStep("station")}>
+              I've Run the Script - Continue
             </Button>
           </CardFooter>
         </Card>
