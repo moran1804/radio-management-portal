@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (data) {
         console.log('Profile found:', data);
-        setProfile(data);
+        setProfile(data as Profile);
       } else {
         console.log('No profile found, this might be expected for new users');
         // For now, set a temporary profile object
@@ -82,20 +82,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error('Error in fetchProfile:', error);
       // Set a fallback profile
-      const fallbackProfile = {
-        id: session.user.id,
-        user_id: session.user.id,
-        name: session.user.email?.split('@')[0] || 'User',
-        role: 'DJ' as const,
-        active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        icecast_username: null,
-        icecast_password_encrypted: null,
-        icecast_address: null,
-        icecast_port: null,
-        icecast_mountpoint: null
-      };
+          const fallbackProfile = {
+            id: session.user.id,
+            user_id: session.user.id,
+            name: session.user.email?.split('@')[0] || 'User',
+            role: 'DJ' as const,
+            active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            icecast_username: null,
+            icecast_password_encrypted: null,
+            icecast_address: null,
+            icecast_port: null,
+            icecast_mountpoint: null
+          };
       setProfile(fallbackProfile);
     }
   };
@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                   setProfile(null);
                 } else if (data) {
                   console.log('✅ Profile successfully loaded:', data);
-                  setProfile(data);
+                  setProfile(data as Profile);
                 } else {
                   console.log('⚠️  No profile found - this may be expected for new users');
                   setProfile(null);
@@ -210,7 +210,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setProfile(null);
           } else if (data) {
             console.log('✅ Initial profile loaded successfully:', data);
-            setProfile(data);
+            setProfile(data as Profile);
           } else {
             console.log('⚠️  No initial profile found');
             setProfile(null);

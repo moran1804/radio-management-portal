@@ -10,14 +10,14 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.4"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
       djs: {
         Row: {
           bio: string | null
-          created_at: string | null
+          created_at: string
           display_name: string
           icecast_address: string | null
           icecast_mountpoint: string | null
@@ -26,11 +26,12 @@ export type Database = {
           icecast_username: string | null
           id: string
           profile_picture_url: string | null
+          updated_at: string
           user_id: string
         }
         Insert: {
           bio?: string | null
-          created_at?: string | null
+          created_at?: string
           display_name: string
           icecast_address?: string | null
           icecast_mountpoint?: string | null
@@ -39,11 +40,12 @@ export type Database = {
           icecast_username?: string | null
           id?: string
           profile_picture_url?: string | null
+          updated_at?: string
           user_id: string
         }
         Update: {
           bio?: string | null
-          created_at?: string | null
+          created_at?: string
           display_name?: string
           icecast_address?: string | null
           icecast_mountpoint?: string | null
@@ -52,7 +54,71 @@ export type Database = {
           icecast_username?: string | null
           id?: string
           profile_picture_url?: string | null
+          updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      external_storage: {
+        Row: {
+          active: boolean
+          config: Json | null
+          created_at: string
+          id: string
+          name: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          config?: Json | null
+          created_at?: string
+          id?: string
+          name: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          config?: Json | null
+          created_at?: string
+          id?: string
+          name?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      jingles: {
+        Row: {
+          active: boolean
+          created_at: string
+          duration: number | null
+          file_path: string | null
+          id: string
+          name: string
+          storage_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          duration?: number | null
+          file_path?: string | null
+          id?: string
+          name: string
+          storage_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          duration?: number | null
+          file_path?: string | null
+          id?: string
+          name?: string
+          storage_path?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -60,65 +126,73 @@ export type Database = {
         Row: {
           id: number
           job_id: string
-          level: string | null
-          message: string | null
-          ts: string | null
+          level: string
+          message: string
+          ts: string
         }
         Insert: {
           id?: number
           job_id: string
-          level?: string | null
-          message?: string | null
-          ts?: string | null
+          level?: string
+          message?: string
+          ts?: string
         }
         Update: {
           id?: number
           job_id?: string
-          level?: string | null
-          message?: string | null
-          ts?: string | null
+          level?: string
+          message?: string
+          ts?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "job_events_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       jobs: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: string
           pid: number | null
           run_at: string
-          schedule_id: string
+          schedule_id: string | null
+          show_id: string | null
           status: string
+          type: string | null
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: string
           pid?: number | null
           run_at: string
-          schedule_id: string
+          schedule_id?: string | null
+          show_id?: string | null
           status?: string
+          type?: string | null
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: string
           pid?: number | null
           run_at?: string
-          schedule_id?: string
+          schedule_id?: string | null
+          show_id?: string | null
           status?: string
+          type?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "jobs_schedule_id_fkey"
+            foreignKeyName: "fk_jobs_schedule_id"
             columns: ["schedule_id"]
             isOneToOne: false
             referencedRelation: "schedules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_jobs_show"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
             referencedColumns: ["id"]
           },
         ]
@@ -134,7 +208,7 @@ export type Database = {
           icecast_username: string | null
           id: string
           name: string
-          role: Database["public"]["Enums"]["user_role"]
+          role: string
           updated_at: string
           user_id: string
         }
@@ -148,7 +222,7 @@ export type Database = {
           icecast_username?: string | null
           id?: string
           name: string
-          role?: Database["public"]["Enums"]["user_role"]
+          role?: string
           updated_at?: string
           user_id: string
         }
@@ -162,7 +236,7 @@ export type Database = {
           icecast_username?: string | null
           id?: string
           name?: string
-          role?: Database["public"]["Enums"]["user_role"]
+          role?: string
           updated_at?: string
           user_id?: string
         }
@@ -170,12 +244,14 @@ export type Database = {
       }
       recurring_slots: {
         Row: {
+          active: boolean
           created_at: string
           created_by: string | null
           day_of_week: number
           description: string | null
-          dj_id: string
-          duration_minutes: number
+          dj_id: string | null
+          duration_minutes: number | null
+          end_time: string | null
           id: string
           is_active: boolean
           start_time: string
@@ -183,12 +259,14 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          active?: boolean
           created_at?: string
           created_by?: string | null
           day_of_week: number
           description?: string | null
-          dj_id: string
-          duration_minutes: number
+          dj_id?: string | null
+          duration_minutes?: number | null
+          end_time?: string | null
           id?: string
           is_active?: boolean
           start_time: string
@@ -196,12 +274,14 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          active?: boolean
           created_at?: string
           created_by?: string | null
           day_of_week?: number
           description?: string | null
-          dj_id?: string
-          duration_minutes?: number
+          dj_id?: string | null
+          duration_minutes?: number | null
+          end_time?: string | null
           id?: string
           is_active?: boolean
           start_time?: string
@@ -218,58 +298,81 @@ export type Database = {
           },
         ]
       }
-      remote_config: {
-        Row: {
-          created_at: string | null
-          id: string
-          key: string
-          updated_at: string | null
-          value: Json
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          key: string
-          updated_at?: string | null
-          value: Json
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          key?: string
-          updated_at?: string | null
-          value?: Json
-        }
-        Relationships: []
-      }
       schedules: {
         Row: {
-          created_at: string | null
+          created_at: string
           ends_at: string
           id: string
           show_id: string
           starts_at: string
           status: string
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           ends_at: string
           id?: string
           show_id: string
           starts_at: string
           status?: string
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           ends_at?: string
           id?: string
           show_id?: string
           starts_at?: string
           status?: string
+          updated_at?: string
         }
         Relationships: [
           {
             foreignKeyName: "schedules_show_id_fkey"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      show_recordings: {
+        Row: {
+          created_at: string
+          duration: number | null
+          file_path: string | null
+          id: string
+          show_id: string | null
+          status: string
+          storage_path: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          duration?: number | null
+          file_path?: string | null
+          id?: string
+          show_id?: string | null
+          status?: string
+          storage_path?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          duration?: number | null
+          file_path?: string | null
+          id?: string
+          show_id?: string | null
+          status?: string
+          storage_path?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_show_recordings_show"
             columns: ["show_id"]
             isOneToOne: false
             referencedRelation: "shows"
@@ -283,54 +386,54 @@ export type Database = {
           description: string | null
           dj_id: string | null
           duration_seconds: number | null
-          end_time: string
+          end_time: string | null
           file_path: string | null
           id: string
           recurring_slot_id: string | null
           scheduled_by: string | null
-          show_type: string | null
-          start_time: string
-          status: string | null
+          show_type: string
+          start_time: string | null
+          status: string
           storage_path: string | null
           title: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           description?: string | null
           dj_id?: string | null
           duration_seconds?: number | null
-          end_time: string
+          end_time?: string | null
           file_path?: string | null
           id?: string
           recurring_slot_id?: string | null
           scheduled_by?: string | null
-          show_type?: string | null
-          start_time: string
-          status?: string | null
+          show_type?: string
+          start_time?: string | null
+          status?: string
           storage_path?: string | null
           title: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           description?: string | null
           dj_id?: string | null
           duration_seconds?: number | null
-          end_time?: string
+          end_time?: string | null
           file_path?: string | null
           id?: string
           recurring_slot_id?: string | null
           scheduled_by?: string | null
-          show_type?: string | null
-          start_time?: string
-          status?: string | null
+          show_type?: string
+          start_time?: string | null
+          status?: string
           storage_path?: string | null
           title?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -338,13 +441,6 @@ export type Database = {
             columns: ["dj_id"]
             isOneToOne: false
             referencedRelation: "djs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "shows_recurring_slot_id_fkey"
-            columns: ["recurring_slot_id"]
-            isOneToOne: false
-            referencedRelation: "recurring_slots"
             referencedColumns: ["id"]
           },
           {
@@ -356,11 +452,34 @@ export type Database = {
           },
         ]
       }
+      station_config: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+          value: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+          value?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: string | null
+        }
+        Relationships: []
+      }
       streaming_credentials: {
         Row: {
           address: string
           created_at: string
-          created_by: string | null
           id: string
           mountpoint: string
           password: string
@@ -372,7 +491,6 @@ export type Database = {
         Insert: {
           address?: string
           created_at?: string
-          created_by?: string | null
           id?: string
           mountpoint?: string
           password?: string
@@ -384,7 +502,6 @@ export type Database = {
         Update: {
           address?: string
           created_at?: string
-          created_by?: string | null
           id?: string
           mountpoint?: string
           password?: string
@@ -392,24 +509,6 @@ export type Database = {
           type?: string
           updated_at?: string
           username?: string
-        }
-        Relationships: []
-      }
-      user_roles: {
-        Row: {
-          created_at: string | null
-          role: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          role: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          role?: string
-          user_id?: string
         }
         Relationships: []
       }
@@ -426,18 +525,9 @@ export type Database = {
         }
         Returns: boolean
       }
-      generate_recurring_shows: {
-        Args: { p_start_date?: string; p_weeks_ahead?: number }
-        Returns: number
-      }
-      get_current_user_role: {
-        Args: never
-        Returns: Database["public"]["Enums"]["user_role"]
-      }
-      set_initial_admin: { Args: never; Returns: undefined }
     }
     Enums: {
-      user_role: "DJ" | "ADMIN"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -564,8 +654,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      user_role: ["DJ", "ADMIN"],
-    },
+    Enums: {},
   },
 } as const
