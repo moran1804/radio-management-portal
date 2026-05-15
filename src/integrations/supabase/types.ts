@@ -153,7 +153,22 @@ export type Database = {
           type?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_jobs_schedule"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "schedules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_jobs_show"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -207,8 +222,10 @@ export type Database = {
           day_of_week: number
           description: string | null
           dj_id: string | null
+          duration_minutes: number | null
           end_time: string
           id: string
+          is_active: boolean
           start_time: string
           title: string
           updated_at: string
@@ -219,8 +236,10 @@ export type Database = {
           day_of_week: number
           description?: string | null
           dj_id?: string | null
+          duration_minutes?: number | null
           end_time: string
           id?: string
+          is_active?: boolean
           start_time: string
           title: string
           updated_at?: string
@@ -231,13 +250,23 @@ export type Database = {
           day_of_week?: number
           description?: string | null
           dj_id?: string | null
+          duration_minutes?: number | null
           end_time?: string
           id?: string
+          is_active?: boolean
           start_time?: string
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_recurring_slots_dj"
+            columns: ["dj_id"]
+            isOneToOne: false
+            referencedRelation: "djs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       schedules: {
         Row: {
@@ -267,7 +296,15 @@ export type Database = {
           status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_schedules_show"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       show_recordings: {
         Row: {
@@ -303,49 +340,77 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_show_recordings_show"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shows: {
         Row: {
           created_at: string
           description: string | null
           dj_id: string | null
+          duration_seconds: number | null
+          end_time: string | null
           file_path: string | null
           id: string
           recurring_slot_id: string | null
           show_type: string
+          start_time: string | null
           status: string
           storage_path: string | null
           title: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           description?: string | null
           dj_id?: string | null
+          duration_seconds?: number | null
+          end_time?: string | null
           file_path?: string | null
           id?: string
           recurring_slot_id?: string | null
           show_type?: string
+          start_time?: string | null
           status?: string
           storage_path?: string | null
           title: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           description?: string | null
           dj_id?: string | null
+          duration_seconds?: number | null
+          end_time?: string | null
           file_path?: string | null
           id?: string
           recurring_slot_id?: string | null
           show_type?: string
+          start_time?: string | null
           status?: string
           storage_path?: string | null
           title?: string
           updated_at?: string
+          user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_shows_dj"
+            columns: ["dj_id"]
+            isOneToOne: false
+            referencedRelation: "djs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       station_config: {
         Row: {
