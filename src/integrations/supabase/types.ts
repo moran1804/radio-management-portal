@@ -122,10 +122,35 @@ export type Database = {
         }
         Relationships: []
       }
+      job_events: {
+        Row: {
+          id: number
+          job_id: string
+          level: string
+          message: string
+          ts: string
+        }
+        Insert: {
+          id?: number
+          job_id: string
+          level?: string
+          message?: string
+          ts?: string
+        }
+        Update: {
+          id?: number
+          job_id?: string
+          level?: string
+          message?: string
+          ts?: string
+        }
+        Relationships: []
+      }
       jobs: {
         Row: {
           created_at: string
           id: string
+          pid: number | null
           run_at: string
           schedule_id: string | null
           show_id: string | null
@@ -136,6 +161,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          pid?: number | null
           run_at: string
           schedule_id?: string | null
           show_id?: string | null
@@ -146,6 +172,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          pid?: number | null
           run_at?: string
           schedule_id?: string | null
           show_id?: string | null
@@ -156,6 +183,13 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "fk_jobs_schedule"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "schedules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_jobs_schedule_id"
             columns: ["schedule_id"]
             isOneToOne: false
             referencedRelation: "schedules"
@@ -223,7 +257,7 @@ export type Database = {
           description: string | null
           dj_id: string | null
           duration_minutes: number | null
-          end_time: string
+          end_time: string | null
           id: string
           is_active: boolean
           start_time: string
@@ -237,7 +271,7 @@ export type Database = {
           description?: string | null
           dj_id?: string | null
           duration_minutes?: number | null
-          end_time: string
+          end_time?: string | null
           id?: string
           is_active?: boolean
           start_time: string
@@ -251,7 +285,7 @@ export type Database = {
           description?: string | null
           dj_id?: string | null
           duration_minutes?: number | null
-          end_time?: string
+          end_time?: string | null
           id?: string
           is_active?: boolean
           start_time?: string
@@ -360,6 +394,7 @@ export type Database = {
           file_path: string | null
           id: string
           recurring_slot_id: string | null
+          scheduled_by: string | null
           show_type: string
           start_time: string | null
           status: string
@@ -377,6 +412,7 @@ export type Database = {
           file_path?: string | null
           id?: string
           recurring_slot_id?: string | null
+          scheduled_by?: string | null
           show_type?: string
           start_time?: string | null
           status?: string
@@ -394,6 +430,7 @@ export type Database = {
           file_path?: string | null
           id?: string
           recurring_slot_id?: string | null
+          scheduled_by?: string | null
           show_type?: string
           start_time?: string | null
           status?: string
@@ -409,6 +446,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "djs"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_shows_user_profile"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -436,12 +480,55 @@ export type Database = {
         }
         Relationships: []
       }
+      streaming_credentials: {
+        Row: {
+          address: string
+          created_at: string
+          id: string
+          mountpoint: string
+          password: string
+          port: number
+          type: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          address?: string
+          created_at?: string
+          id?: string
+          mountpoint?: string
+          password?: string
+          port?: number
+          type?: string
+          updated_at?: string
+          username?: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          id?: string
+          mountpoint?: string
+          password?: string
+          port?: number
+          type?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_show_conflict: {
+        Args: {
+          p_end_time: string
+          p_exclude_show_id?: string
+          p_start_time: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
