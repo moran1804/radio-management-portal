@@ -298,6 +298,30 @@ export type Database = {
           },
         ]
       }
+      remote_config: {
+        Row: {
+          created_at: string | null
+          id: string
+          key: string
+          updated_at: string | null
+          value: Json
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          key: string
+          updated_at?: string | null
+          value: Json
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          key?: string
+          updated_at?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
       schedules: {
         Row: {
           created_at: string
@@ -512,6 +536,24 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          role?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -525,9 +567,19 @@ export type Database = {
         }
         Returns: boolean
       }
+      generate_recurring_shows: {
+        Args: { p_start_date?: string; p_weeks_ahead?: number }
+        Returns: number
+      }
+      get_current_user_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      has_role: { Args: { _role: string; _user_id: string }; Returns: boolean }
+      set_initial_admin: { Args: never; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      user_role: "DJ" | "ADMIN"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -654,6 +706,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["DJ", "ADMIN"],
+    },
   },
 } as const
