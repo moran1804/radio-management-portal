@@ -1,1 +1,4 @@
 project_id = "gsqaqdiftgrxvzuckhay"
+
+[functions.show-runner-bridge]
+verify_jwt = false
