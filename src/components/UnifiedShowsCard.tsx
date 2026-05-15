@@ -355,7 +355,7 @@ export const UnifiedShowsCard = () => {
         // Return data.path from the upload response
         return data.path;
       } else {
-        let progressInterval: NodeJS.Timeout;
+        let progressInterval: ReturnType<typeof setInterval>;
         
         const uploadPromise = supabase.storage
           .from('show-audio')
