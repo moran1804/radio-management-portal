@@ -182,13 +182,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_jobs_schedule"
-            columns: ["schedule_id"]
-            isOneToOne: false
-            referencedRelation: "schedules"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "fk_jobs_schedule_id"
             columns: ["schedule_id"]
             isOneToOne: false
@@ -253,6 +246,7 @@ export type Database = {
         Row: {
           active: boolean
           created_at: string
+          created_by: string | null
           day_of_week: number
           description: string | null
           dj_id: string | null
@@ -267,6 +261,7 @@ export type Database = {
         Insert: {
           active?: boolean
           created_at?: string
+          created_by?: string | null
           day_of_week: number
           description?: string | null
           dj_id?: string | null
@@ -281,6 +276,7 @@ export type Database = {
         Update: {
           active?: boolean
           created_at?: string
+          created_by?: string | null
           day_of_week?: number
           description?: string | null
           dj_id?: string | null
@@ -294,7 +290,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_recurring_slots_dj"
+            foreignKeyName: "recurring_slots_dj_id_fkey"
             columns: ["dj_id"]
             isOneToOne: false
             referencedRelation: "djs"
@@ -332,7 +328,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_schedules_show"
+            foreignKeyName: "schedules_show_id_fkey"
             columns: ["show_id"]
             isOneToOne: false
             referencedRelation: "shows"
@@ -441,14 +437,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_shows_dj"
+            foreignKeyName: "shows_dj_id_fkey"
             columns: ["dj_id"]
             isOneToOne: false
             referencedRelation: "djs"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_shows_user_profile"
+            foreignKeyName: "shows_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
