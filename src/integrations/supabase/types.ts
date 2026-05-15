@@ -14,7 +14,363 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      djs: {
+        Row: {
+          bio: string | null
+          created_at: string
+          display_name: string
+          icecast_address: string | null
+          icecast_mountpoint: string | null
+          icecast_password_encrypted: string | null
+          icecast_port: number | null
+          icecast_username: string | null
+          id: string
+          profile_picture_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          display_name: string
+          icecast_address?: string | null
+          icecast_mountpoint?: string | null
+          icecast_password_encrypted?: string | null
+          icecast_port?: number | null
+          icecast_username?: string | null
+          id?: string
+          profile_picture_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          display_name?: string
+          icecast_address?: string | null
+          icecast_mountpoint?: string | null
+          icecast_password_encrypted?: string | null
+          icecast_port?: number | null
+          icecast_username?: string | null
+          id?: string
+          profile_picture_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      external_storage: {
+        Row: {
+          active: boolean
+          config: Json | null
+          created_at: string
+          id: string
+          name: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          config?: Json | null
+          created_at?: string
+          id?: string
+          name: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          config?: Json | null
+          created_at?: string
+          id?: string
+          name?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      jingles: {
+        Row: {
+          active: boolean
+          created_at: string
+          duration: number | null
+          file_path: string | null
+          id: string
+          name: string
+          storage_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          duration?: number | null
+          file_path?: string | null
+          id?: string
+          name: string
+          storage_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          duration?: number | null
+          file_path?: string | null
+          id?: string
+          name?: string
+          storage_path?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          created_at: string
+          id: string
+          run_at: string
+          schedule_id: string | null
+          show_id: string | null
+          status: string
+          type: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          run_at: string
+          schedule_id?: string | null
+          show_id?: string | null
+          status?: string
+          type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          run_at?: string
+          schedule_id?: string | null
+          show_id?: string | null
+          status?: string
+          type?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          active: boolean
+          created_at: string
+          icecast_address: string | null
+          icecast_mountpoint: string | null
+          icecast_password_encrypted: string | null
+          icecast_port: number | null
+          icecast_username: string | null
+          id: string
+          name: string
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          icecast_address?: string | null
+          icecast_mountpoint?: string | null
+          icecast_password_encrypted?: string | null
+          icecast_port?: number | null
+          icecast_username?: string | null
+          id?: string
+          name: string
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          icecast_address?: string | null
+          icecast_mountpoint?: string | null
+          icecast_password_encrypted?: string | null
+          icecast_port?: number | null
+          icecast_username?: string | null
+          id?: string
+          name?: string
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      recurring_slots: {
+        Row: {
+          active: boolean
+          created_at: string
+          day_of_week: number
+          description: string | null
+          dj_id: string | null
+          end_time: string
+          id: string
+          start_time: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          day_of_week: number
+          description?: string | null
+          dj_id?: string | null
+          end_time: string
+          id?: string
+          start_time: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          day_of_week?: number
+          description?: string | null
+          dj_id?: string | null
+          end_time?: string
+          id?: string
+          start_time?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      schedules: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          show_id: string
+          starts_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          show_id: string
+          starts_at: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          show_id?: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      show_recordings: {
+        Row: {
+          created_at: string
+          duration: number | null
+          file_path: string | null
+          id: string
+          show_id: string | null
+          status: string
+          storage_path: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          duration?: number | null
+          file_path?: string | null
+          id?: string
+          show_id?: string | null
+          status?: string
+          storage_path?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          duration?: number | null
+          file_path?: string | null
+          id?: string
+          show_id?: string | null
+          status?: string
+          storage_path?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      shows: {
+        Row: {
+          created_at: string
+          description: string | null
+          dj_id: string | null
+          file_path: string | null
+          id: string
+          recurring_slot_id: string | null
+          show_type: string
+          status: string
+          storage_path: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          dj_id?: string | null
+          file_path?: string | null
+          id?: string
+          recurring_slot_id?: string | null
+          show_type?: string
+          status?: string
+          storage_path?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          dj_id?: string | null
+          file_path?: string | null
+          id?: string
+          recurring_slot_id?: string | null
+          show_type?: string
+          status?: string
+          storage_path?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      station_config: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+          value: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+          value?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
