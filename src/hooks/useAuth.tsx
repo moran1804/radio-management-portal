@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (data) {
         console.log('Profile found:', data);
-        setProfile(data);
+        setProfile(data as Profile);
       } else {
         console.log('No profile found, this might be expected for new users');
         // For now, set a temporary profile object
