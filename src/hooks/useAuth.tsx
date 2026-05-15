@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                   setProfile(null);
                 } else if (data) {
                   console.log('✅ Profile successfully loaded:', data);
-                  setProfile(data);
+                  setProfile(data as Profile);
                 } else {
                   console.log('⚠️  No profile found - this may be expected for new users');
                   setProfile(null);
@@ -210,7 +210,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setProfile(null);
           } else if (data) {
             console.log('✅ Initial profile loaded successfully:', data);
-            setProfile(data);
+            setProfile(data as Profile);
           } else {
             console.log('⚠️  No initial profile found');
             setProfile(null);
